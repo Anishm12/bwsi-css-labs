@@ -37,18 +37,46 @@ def simple_calculator(operation: str, num1: float, num2: float) -> float:
     else:
         raise ValueError("Invalid operation. Please choose from 'add', 'subtract', 'multiply', or 'divide'.")
 
+def requestSanitizedNumber(prompt: str) -> float:
+    while True:
+        try:
+            return float(input(prompt))
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+
+def requestSanitizedOperation(prompt: str) -> str:
+    """Prompt the user until they enter a valid operation.
+
+    Accepts: add, subtract, multiply, divide (case-insensitive).
+    Returns the operation in lowercase.
+    """
+    valid_ops = {"add", "subtract", "multiply", "divide"}
+    while True:
+        op = input(prompt).strip().lower()
+        if op in valid_ops:
+            return op
+        print("Invalid operation. Please choose from 'add', 'subtract', 'multiply', or 'divide'.")
+
 def main():
     
     print(f"===== Simple Calculator =====")
 
     # Ask the user for sample input    
-    num1 = float(input("Enter the first number: "))
-    num2 = float(input("Enter the second number: "))
-    operation = input("Enter the operation (add, subtract, multiply, divide): ").strip().lower()
+    num1 = requestSanitizedNumber("Enter the first number: ")
+    num2 = requestSanitizedNumber("Enter the second number: ")
+    operation = requestSanitizedOperation("Enter the operation (add, subtract, multiply, divide): ")
 
     # Perform the calculation and display the result
     result = simple_calculator(operation, num1, num2)
-    print(f"The result of {operation}ing {num1} and {num2} is: {result}")
+    verb_map = {
+        "add": "adding",
+        "subtract": "subtracting",
+        "multiply": "multiplying",
+        "divide": "dividing",
+    }
+    action = verb_map.get(operation, operation)
+    print(f"The result of {action} {num1} and {num2} is: {result}")
 
 
 if __name__ == "__main__":
